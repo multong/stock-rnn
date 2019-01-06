@@ -37,9 +37,9 @@ def _download_sp500_list():
 
 
 def _load_symbols():
-    _download_sp500_list()
+#    _download_sp500_list()
     df_sp500 = pd.read_csv(SP500_LIST_PATH)
-    df_sp500.sort('Market Cap', ascending=False, inplace=True)
+    df_sp500.sort_values('Market Cap', ascending=False, inplace=True)
     stock_symbols = df_sp500['Symbol'].unique().tolist()
     print ("Loaded %d stock symbols" % len(stock_symbols))
     return stock_symbols
@@ -59,17 +59,17 @@ def fetch_prices(symbol, out_name):
 
     BASE_URL = "https://finance.google.com/finance/historical?output=csv&q={0}&startdate=Jan+1%2C+1980&enddate={1}"
     symbol_url = BASE_URL.format(
-        urllib2.quote(symbol),
-        urllib2.quote(now_datetime, '+')
+        urllib2.request.quote(symbol),
+        urllib2.request.quote(now_datetime, '+')
     )
     print ("Fetching {} ...".format(symbol))
     print (symbol_url)
 
     try:
-        f = urllib2.urlopen(symbol_url)
+        f = urllib2.request.urlopen(symbol_url)
         with open(out_name, 'w') as fin:
             print >> fin, f.read()
-    except urllib2.HTTPError:
+    except urllib2.request.HTTPError:
         print ("Failed when fetching {}".format(symbol))
         return False
 
